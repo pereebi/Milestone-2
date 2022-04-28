@@ -1,15 +1,19 @@
+// import the necessary dependencies and connection from the database
 import bcrypt from "bcrypt";
 // @ts-ignore
 import client from "../database";
 
+// create and export a type for the User
 export type User = {
     firstname: string,
     lastname: string,
     password: string
 }
 
+// create a global variable for the pepper on the password
 const pepper = process.env.BCRYPT_PASSWORD;
 
+// create and export the class of all CRUD methods
 export class AllUsers {
     // read the database
     async index(): Promise<User[]> {
@@ -56,6 +60,7 @@ export class AllUsers {
         }
     }
 
+    // create a method where you compare the hashed password against the password inputed
     async authenticate(firstname: string, lastname: string, password: string): Promise<User | null> {
         // @ts-ignore
         const connection = await client.connect();
@@ -98,5 +103,5 @@ export class AllUsers {
         } catch (err) {
             throw new Error(`Could not delete user ${id}. Error: ${err}`)
         }
-}
+    }
 }

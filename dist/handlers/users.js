@@ -42,7 +42,9 @@ exports.__esModule = true;
 exports.verifyAuthToken = void 0;
 var users_1 = require("../models/users");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+// create an instance of class of users imported
 var users = new users_1.AllUsers();
+// method to show all Users in the db
 var index = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var allUsers;
     return __generator(this, function (_a) {
@@ -55,6 +57,7 @@ var index = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
         }
     });
 }); };
+// method to show a user by id
 var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, theUser, error_1;
     return __generator(this, function (_a) {
@@ -75,6 +78,7 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
         }
     });
 }); };
+// method to create a new user in the db
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, newUser, token, error_2;
     return __generator(this, function (_a) {
@@ -102,6 +106,7 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); };
+// method to authenticate the user logining in
 var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, userAuthenticated, token, error_3;
     return __generator(this, function (_a) {
@@ -130,6 +135,7 @@ var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0
         }
     });
 }); };
+// method to verify that the user is suing an authorized token
 var verifyAuthToken = function (req, res, next) {
     try {
         var authorizationHeader = req.headers.authorization;
@@ -143,6 +149,7 @@ var verifyAuthToken = function (req, res, next) {
     }
 };
 exports.verifyAuthToken = verifyAuthToken;
+// method to update a user in the db
 var update = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, _a, firstname, lastname, password, allUsers, error_4;
     return __generator(this, function (_b) {
@@ -165,6 +172,7 @@ var update = function (req, res) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); };
+// method to delete a user by id in the db
 var deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, oneUser, error_5;
     return __generator(this, function (_a) {
@@ -185,6 +193,7 @@ var deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
         }
     });
 }); };
+// create routes for the different methods
 var users_routes = function (app) {
     app.get('/users', exports.verifyAuthToken, index);
     app.get('/users/:id', exports.verifyAuthToken, show);
@@ -193,4 +202,5 @@ var users_routes = function (app) {
     app.put('/users/:id', exports.verifyAuthToken, update);
     app["delete"]('/users/:id', exports.verifyAuthToken, deleteUser);
 };
+// export the routes function
 exports["default"] = users_routes;

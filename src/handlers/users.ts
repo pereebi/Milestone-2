@@ -1,15 +1,19 @@
+// import the necessary dependecies and functions
 import express, { NextFunction, Request, Response } from 'express';
 import { User, AllUsers } from '../models/users';
 import jwt from "jsonwebtoken";
 import { textSpanContainsPosition } from 'typescript';
 
+// create an instance of class of users imported
 const users = new AllUsers();
 
+// method to show all Users in the db
 const index = async (req: Request, res: Response) => {
     const allUsers = await users.index();
     res.json(allUsers);
 }
 
+// method to show a user by id
 const show = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
@@ -21,6 +25,7 @@ const show = async (req: Request, res: Response) => {
     }
 }
 
+// method to create a new user in the db
 const create = async (req: Request, res: Response ) => {
     const user: User = {
         firstname: req.body.firstname,
@@ -37,6 +42,7 @@ const create = async (req: Request, res: Response ) => {
    
 };
 
+// method to authenticate the user logining in
 const authenticate = async (req: Request, res: Response) => {
     const user: User = {
         firstname: req.body.firstname,
@@ -53,6 +59,7 @@ const authenticate = async (req: Request, res: Response) => {
     }
 }
 
+// method to verify that the user is suing an authorized token
 export const verifyAuthToken = (req: Request, res: Response, next: NextFunction) => {
     try {
         const authorizationHeader = req.headers.authorization;
@@ -65,6 +72,7 @@ export const verifyAuthToken = (req: Request, res: Response, next: NextFunction)
     }
 }
 
+// method to update a user in the db
 const update = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
@@ -76,9 +84,9 @@ const update = async (req: Request, res: Response) => {
         res.status(400).json(error);
 
     }
-    
 }
 
+// method to delete a user by id in the db
 const deleteUser = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
@@ -91,7 +99,7 @@ const deleteUser = async (req: Request, res: Response) => {
    
 }
 
-
+// create routes for the different methods
 const users_routes = (app: express.Application) => {
     app.get('/users', verifyAuthToken, index);
     app.get('/users/:id', verifyAuthToken, show);
@@ -102,5 +110,6 @@ const users_routes = (app: express.Application) => {
     
 }
 
+// export the routes function
 export default users_routes;
 

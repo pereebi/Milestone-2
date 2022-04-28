@@ -1,12 +1,15 @@
+// import the client connection from the database file
 // @ts-ignore
 import client from "../database";
 
+// create and export a type for the Products
 export type Product = {
     name: string,
     price: number,
     category: string
 }
 
+// create and export a class for the CRUD methods
 export class AllProducts {
         // read the database
     async index(): Promise<Product[]> {
@@ -37,7 +40,7 @@ export class AllProducts {
     }
     
     // create new product
-    async create(product: Product) {
+    async create(product: Product): Promise<Product> {
         try {
             // @ts-ignore
             const connection = await client.connect();
@@ -79,7 +82,7 @@ export class AllProducts {
             throw new Error(`Could not update product ${id}. Error: ${error}`);        
         }
     }   
-    
+
     // delete from the database
    async delete(id: string): Promise<Product> {
         try {

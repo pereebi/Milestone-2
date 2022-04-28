@@ -40,8 +40,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 exports.AllProducts = void 0;
+// import the client connection from the database file
 // @ts-ignore
 var database_1 = __importDefault(require("../database"));
+// create and export a class for the CRUD methods
 var AllProducts = /** @class */ (function () {
     function AllProducts() {
     }

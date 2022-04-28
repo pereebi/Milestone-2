@@ -1,8 +1,11 @@
+// import the dependencies needed
 import dotenv from 'dotenv';
 import { Pool } from 'pg';
 
+// initialize environment variables
 dotenv.config();
 
+// reference the variables in the .env folder
 const { 
     POSTGRES_HOST, 
     POSTGRES_DB,
@@ -12,6 +15,7 @@ const {
     // NODE_EVN
 } = process.env;
 
+// create a connection to the database
 const client = new Pool({
     host: POSTGRES_HOST,
     database: POSTGRES_DB,

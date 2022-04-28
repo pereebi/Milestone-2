@@ -1,16 +1,24 @@
+// import necessary dependecies
 import express, { NextFunction, Request, Response } from 'express';
 import { Product, AllProducts } from '../models/products';
 import jwt from "jsonwebtoken";
 import { verifyAuthToken } from './users';
 
-
+// create an instance of the class imported
 const products = new AllProducts();
 
+// method to show all Products in the db
 const index = async (req: Request, res: Response) => {
-    const myProducts = await products.index();
-    res.json(myProducts);
+    try {
+        const myProducts = await products.index();
+        res.json(myProducts);
+    } catch (error) {
+        res.status(400).json(error);
+    }
+    
 }
 
+// method to show a product by id
 const show = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
@@ -20,9 +28,9 @@ const show = async (req: Request, res: Response) => {
         res.status(400).json(error);
 
     }
-  
 }
 
+// method to create a new product in the db
 const create = async (req: Request, res: Response) => {
     const product: Product = {
         name: req.body.name,
@@ -38,6 +46,7 @@ const create = async (req: Request, res: Response) => {
     }
 }
 
+// method to show a product by category
 const showProduct = async (req: Request, res: Response) => {
     try {
         const category = req.query.category as string;
@@ -51,6 +60,7 @@ const showProduct = async (req: Request, res: Response) => {
   
 }
 
+// method to update a product in the db
 const update = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
@@ -65,6 +75,7 @@ const update = async (req: Request, res: Response) => {
     
 }
 
+// method to delete a product by id in the db
 const deleteProduct = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
@@ -77,7 +88,7 @@ const deleteProduct = async (req: Request, res: Response) => {
    
 }
 
-
+// create routes for the different methods
 const products_routes = (app: express.Application) => {
     app.get('/products', index);
     app.post('/products', verifyAuthToken, create);
@@ -87,4 +98,5 @@ const products_routes = (app: express.Application) => {
     app.delete('/products/:id', verifyAuthToken, deleteProduct);
 }
 
+// export the routes function
 export default products_routes;

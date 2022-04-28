@@ -39,19 +39,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.AllUsers = void 0;
-// import the necessary dependencies and connection from the database
-var bcrypt_1 = __importDefault(require("bcrypt"));
+exports.AllOrders = void 0;
+// import the client connection from the database file
 // @ts-ignore
 var database_1 = __importDefault(require("../database"));
-// create a global variable for the pepper on the password
-var pepper = process.env.BCRYPT_PASSWORD;
-// create and export the class of all CRUD methods
-var AllUsers = /** @class */ (function () {
-    function AllUsers() {
+// create and export a class for the CRUD methods
+var AllOrders = /** @class */ (function () {
+    function AllOrders() {
     }
-    // read the database
-    AllUsers.prototype.index = function () {
+    AllOrders.prototype.index = function () {
         return __awaiter(this, void 0, void 0, function () {
             var connection, sql, result, error_1;
             return __generator(this, function (_a) {
@@ -61,7 +57,7 @@ var AllUsers = /** @class */ (function () {
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         connection = _a.sent();
-                        sql = "SELECT * FROM users";
+                        sql = "SELECT * FROM orders";
                         return [4 /*yield*/, connection.query(sql)];
                     case 2:
                         result = _a.sent();
@@ -69,16 +65,42 @@ var AllUsers = /** @class */ (function () {
                         return [2 /*return*/, result.rows];
                     case 3:
                         error_1 = _a.sent();
-                        throw new Error("Cannot get users ".concat(error_1));
+                        throw new Error("Cannot get orders ".concat(error_1));
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    // create new product
+    AllOrders.prototype.create = function (order) {
+        return __awaiter(this, void 0, void 0, function () {
+            var connection, text, values, res, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, database_1["default"].connect()];
+                    case 1:
+                        connection = _a.sent();
+                        text = "INSERT INTO orders(products_id, product_quantity, users_id, order_status) VALUES($1, $2, $3) RETURNING *";
+                        values = [order.products_id, order.product_quantity, order.users_id, order.order_status];
+                        return [4 /*yield*/, connection.query(text, values)];
+                    case 2:
+                        res = _a.sent();
+                        console.log(res.rows[0]);
+                        return [2 /*return*/, res.rows[0]];
+                    case 3:
+                        error_2 = _a.sent();
+                        throw new Error("could not create new order ".concat(error_2));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
     // get a item from the database
-    AllUsers.prototype.show = function (id) {
+    AllOrders.prototype.show = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var connection, sql, result, error_2;
+            var connection, sql, result, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -86,76 +108,24 @@ var AllUsers = /** @class */ (function () {
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         connection = _a.sent();
-                        sql = 'SELECT * FROM users WHERE id=($1)';
+                        sql = 'SELECT * FROM orders WHERE id=($1)';
                         return [4 /*yield*/, connection.query(sql, [id])];
-                    case 2:
-                        result = _a.sent();
-                        connection.release();
-                        return [2 /*return*/, result.rows[0]];
-                    case 3:
-                        error_2 = _a.sent();
-                        throw new Error("Could not find users ".concat(id, ", Error: ").concat(error_2));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    // create a new user in the database
-    AllUsers.prototype.create = function (user) {
-        return __awaiter(this, void 0, void 0, function () {
-            var connection, saltRounds, sql, hash, values, result, error_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        connection = _a.sent();
-                        saltRounds = process.env.SALT_ROUNDS;
-                        sql = "INSERT INTO users (firstname, lastname, password_digest) VALUES($1, $2, $3) RETURNING *";
-                        hash = bcrypt_1["default"].hashSync(user.password + pepper, parseInt(saltRounds));
-                        values = [user.firstname, user.lastname, hash];
-                        return [4 /*yield*/, connection.query(sql, values)];
                     case 2:
                         result = _a.sent();
                         connection.release();
                         return [2 /*return*/, result.rows[0]];
                     case 3:
                         error_3 = _a.sent();
-                        throw new Error("Cannot create new user ".concat(user.firstname, ". Error: ").concat(error_3));
+                        throw new Error("Could not find order ".concat(id, ", Error: ").concat(error_3));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    // create a method where you compare the hashed password against the password inputed
-    AllUsers.prototype.authenticate = function (firstname, lastname, password) {
+    // add a product to an order
+    AllOrders.prototype.addProduct = function (quantity, order_id, product_id) {
         return __awaiter(this, void 0, void 0, function () {
-            var connection, sql, result, user;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        connection = _a.sent();
-                        sql = "SELECT password_digest FROM users WHERE firstname = ($1) AND lastname = ($2)";
-                        return [4 /*yield*/, connection.query(sql, [firstname, lastname])];
-                    case 2:
-                        result = _a.sent();
-                        if (result.rows.length) {
-                            user = result.rows[0];
-                            if (bcrypt_1["default"].compareSync(password + pepper, user.password_digest)) {
-                                return [2 /*return*/, user];
-                            }
-                        }
-                        return [2 /*return*/, null];
-                }
-            });
-        });
-    };
-    // update an item in the database by id
-    AllUsers.prototype.update = function (id, firstname, lastname, password) {
-        return __awaiter(this, void 0, void 0, function () {
-            var connection, sql, values, result, error_4;
+            var connection, sql, result, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -163,47 +133,20 @@ var AllUsers = /** @class */ (function () {
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         connection = _a.sent();
-                        sql = 'UPDATE products SET firstname = $1, lastname = $2, password_digest = $3 WHERE id=($4) RETURNING *';
-                        values = [firstname, lastname, password, id];
-                        return [4 /*yield*/, connection.query(sql, values)];
+                        sql = 'INSERT INTO order_products(quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *';
+                        return [4 /*yield*/, connection.query(sql, [quantity, order_id, product_id])];
                     case 2:
                         result = _a.sent();
                         connection.release();
                         return [2 /*return*/, result.rows[0]];
                     case 3:
                         error_4 = _a.sent();
-                        throw new Error("Could not update user ".concat(id, ". Error: ").concat(error_4));
+                        throw new Error("could not add product ".concat(product_id, " to order ").concat(order_id, ": ").concat(error_4));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    // delete from the database
-    AllUsers.prototype["delete"] = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var connection, sql, result, books, err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        connection = _a.sent();
-                        sql = 'DELETE FROM users WHERE id=($1) RETURNING *';
-                        return [4 /*yield*/, connection.query(sql, [id])];
-                    case 2:
-                        result = _a.sent();
-                        books = result.rows[0];
-                        connection.release();
-                        return [2 /*return*/, books];
-                    case 3:
-                        err_1 = _a.sent();
-                        throw new Error("Could not delete user ".concat(id, ". Error: ").concat(err_1));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return AllUsers;
+    return AllOrders;
 }());
-exports.AllUsers = AllUsers;
+exports.AllOrders = AllOrders;
