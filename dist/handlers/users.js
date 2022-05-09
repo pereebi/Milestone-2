@@ -46,20 +46,30 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var users = new users_1.AllUsers();
 // method to show all Users in the db
 var index = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var allUsers;
+    var allUsers, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, users.index()];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, users.index()];
             case 1:
                 allUsers = _a.sent();
-                res.json(allUsers);
-                return [2 /*return*/];
+                res.status(200).send({
+                    data: allUsers,
+                    message: 'Successfully fetched all users'
+                });
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                res.status(400).send('Bad request');
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
 // method to show a user by id
 var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, theUser, error_1;
+    var id, theUser, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -68,11 +78,14 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 return [4 /*yield*/, users.show(id)];
             case 1:
                 theUser = _a.sent();
-                res.json(theUser);
+                res.status(200).send({
+                    data: theUser,
+                    message: 'Successfully fetched user'
+                });
                 return [3 /*break*/, 3];
             case 2:
-                error_1 = _a.sent();
-                res.status(400).json(error_1);
+                error_2 = _a.sent();
+                res.status(400).send('Bad request');
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -80,7 +93,7 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
 }); };
 // method to create a new user in the db
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newUser, token, error_2;
+    var user, newUser, token, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -96,11 +109,12 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
             case 2:
                 newUser = _a.sent();
                 token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKEN_SECRET);
-                res.json(token);
+                res.status(201).send('Successfully Signed up');
+                console.log(token);
                 return [3 /*break*/, 4];
             case 3:
-                error_2 = _a.sent();
-                res.status(400).json(error_2);
+                error_3 = _a.sent();
+                res.status(401).send('Unauthorized user');
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -108,7 +122,7 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
 }); };
 // method to authenticate the user logining in
 var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, userAuthenticated, token, error_3;
+    var user, userAuthenticated, token, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -124,12 +138,12 @@ var authenticate = function (req, res) { return __awaiter(void 0, void 0, void 0
             case 2:
                 userAuthenticated = _a.sent();
                 token = jsonwebtoken_1["default"].sign({ user: userAuthenticated }, process.env.TOKEN_SECRET);
-                res.json(token);
+                res.status(201).send('Successfully Login');
+                console.log(token);
                 return [3 /*break*/, 4];
             case 3:
-                error_3 = _a.sent();
-                res.status(401);
-                res.json({ error: error_3 });
+                error_4 = _a.sent();
+                res.status(400).send('Bad request');
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -144,14 +158,13 @@ var verifyAuthToken = function (req, res, next) {
         next();
     }
     catch (error) {
-        res.status(401);
-        res.json({ error: error });
+        res.status(400).send('Bad request');
     }
 };
 exports.verifyAuthToken = verifyAuthToken;
 // method to update a user in the db
 var update = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, _a, firstname, lastname, password, allUsers, error_4;
+    var id, _a, firstname, lastname, password, allUsers, error_5;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -161,12 +174,12 @@ var update = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, users.update(id, firstname, lastname, password)];
             case 1:
                 allUsers = _b.sent();
-                res.json(allUsers);
+                res.send('Successfully updated').status(202);
                 console.log(allUsers);
                 return [3 /*break*/, 3];
             case 2:
-                error_4 = _b.sent();
-                res.status(400).json(error_4);
+                error_5 = _b.sent();
+                res.status(401).send('Unauthorized user');
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -174,7 +187,7 @@ var update = function (req, res) { return __awaiter(void 0, void 0, void 0, func
 }); };
 // method to delete a user by id in the db
 var deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, oneUser, error_5;
+    var id, oneUser, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -183,11 +196,11 @@ var deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, users["delete"](id)];
             case 1:
                 oneUser = _a.sent();
-                res.json(oneUser);
+                res.send('Successfully deleted User').status(200);
                 return [3 /*break*/, 3];
             case 2:
-                error_5 = _a.sent();
-                res.status(400).json(error_5);
+                error_6 = _a.sent();
+                res.status(401).send('Unauthorized user');
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

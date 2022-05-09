@@ -41,20 +41,30 @@ var users_1 = require("./users");
 var orders = new orders_1.AllOrders;
 // method to show all Orders in the db
 var index = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var currentOrders;
+    var currentOrders, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, orders.index()];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, orders.index()];
             case 1:
                 currentOrders = _a.sent();
-                res.json(currentOrders);
-                return [2 /*return*/];
+                res.status(200).send({
+                    data: currentOrders,
+                    message: 'Successfully fetched Orders'
+                });
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                res.status(401).send('Unauthorized user');
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
 // method to show a order by id
 var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, singleOrder, error_1;
+    var id, singleOrder, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -63,11 +73,14 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 return [4 /*yield*/, orders.show(id)];
             case 1:
                 singleOrder = _a.sent();
-                res.json(singleOrder);
+                res.status(200).send({
+                    data: singleOrder,
+                    message: 'Fechted Order by id'
+                });
                 return [3 /*break*/, 3];
             case 2:
-                error_1 = _a.sent();
-                res.status(400).json(error_1);
+                error_2 = _a.sent();
+                res.status(401).send('Unauthorized user');
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -75,7 +88,7 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
 }); };
 // method to create a new order in the db
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var order, newOrder, error_2;
+    var order, newOrder, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -91,11 +104,11 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, orders.create(order)];
             case 2:
                 newOrder = _a.sent();
-                res.json(newOrder);
+                res.status(201).send('Successfully created');
                 return [3 /*break*/, 4];
             case 3:
-                error_2 = _a.sent();
-                res.status(400).json(error_2);
+                error_3 = _a.sent();
+                res.status(401).send('Unauthorized user');
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -103,7 +116,7 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
 }); };
 // add a product to an order
 var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var order_id, product_id, quantity, addProduct_1, error_3;
+    var order_id, product_id, quantity, addProduct_1, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -116,9 +129,9 @@ var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 addProduct_1 = _a.sent();
                 return [2 /*return*/, addProduct_1];
             case 2:
-                error_3 = _a.sent();
+                error_4 = _a.sent();
                 res.status(400);
-                res.json(error_3);
+                res.json(error_4);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

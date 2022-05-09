@@ -9,8 +9,15 @@ const users = new AllUsers();
 
 // method to show all Users in the db
 const index = async (req: Request, res: Response) => {
-    const allUsers = await users.index();
-    res.json(allUsers);
+    try {
+        const allUsers = await users.index();
+        res.status(200).send({ 
+            data: allUsers,
+            message: 'Successfully fetched all users'
+        });
+    } catch (error) {
+        res.status(400).send('Bad request');
+    }
 }
 
 // method to show a user by id
@@ -18,10 +25,12 @@ const show = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
         const theUser = await users.show(id);
-        res.json(theUser);
+        res.status(200).send({ 
+            data: theUser,
+            message: 'Successfully fetched user'
+        });
     } catch (error) {
-        res.status(400).json(error);
-
+        res.status(400).send('Bad request');
     }
 }
 
@@ -35,9 +44,10 @@ const create = async (req: Request, res: Response ) => {
     try { 
         const newUser = await users.create(user);
         const token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as string);
-        res.json(token);
+        res.status(201).send('Successfully Signed up');
+        console.log(token);
     } catch (error) {
-        res.status(400).json(error);
+        res.status(401).send('Unauthorized user');
     }
    
 };
@@ -52,10 +62,10 @@ const authenticate = async (req: Request, res: Response) => {
     try {
         const userAuthenticated = await users.authenticate(req.body.firstname, req.body.lastname, req.body.password);
         const token = jwt.sign({ user: userAuthenticated }, process.env.TOKEN_SECRET as string);
-        res.json(token);
+        res.status(201).send('Successfully Login');
+        console.log(token);
     } catch (error) {
-        res.status(401);
-    res.json({ error });    
+        res.status(400).send('Bad request');   
     }
 }
 
@@ -67,8 +77,7 @@ export const verifyAuthToken = (req: Request, res: Response, next: NextFunction)
         const decoded = jwt.verify(token as string, process.env.TOKEN_SECRET as string);
         next();
     } catch (error) {
-        res.status(401);
-        res.json({ error });
+        res.status(400).send('Bad request');
     }
 }
 
@@ -78,11 +87,10 @@ const update = async (req: Request, res: Response) => {
         const id = req.params.id as string;
         const { firstname, lastname, password } = req.body;
         const allUsers = await users.update(id, firstname, lastname, password);
-        res.json(allUsers);
+        res.send('Successfully updated').status(202);
         console.log(allUsers);
     } catch (error) {
-        res.status(400).json(error);
-
+        res.status(401).send('Unauthorized user');
     }
 }
 
@@ -91,10 +99,9 @@ const deleteUser = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
         const oneUser = await users.delete(id);
-        res.json(oneUser);
+        res.send('Successfully deleted User').status(200);
     } catch (error) {
-        res.status(400).json(error);
-
+        res.status(401).send('Unauthorized user');
     }
    
 }

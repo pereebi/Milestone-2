@@ -8,8 +8,16 @@ const orders = new AllOrders;
 
 // method to show all Orders in the db
 const index = async (req: Request, res: Response) => {
-    const currentOrders = await orders.index();
-    res.json(currentOrders);
+    try {
+        const currentOrders = await orders.index();
+        res.status(200).send({ 
+            data: currentOrders,
+            message: 'Successfully fetched Orders' 
+        });
+    } catch (error) {
+        res.status(401).send('Unauthorized user');
+    }
+   
 }
 
 // method to show a order by id
@@ -17,10 +25,12 @@ const show = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
         const singleOrder = await orders.show(id);
-        res.json(singleOrder);
+        res.status(200).send({ 
+            data: singleOrder,
+            message: 'Fechted Order by id'
+        });
     } catch (error) {
-        res.status(400).json(error);
-
+        res.status(401).send('Unauthorized user');
     }
 }
 
@@ -35,9 +45,9 @@ const create = async (req: Request, res: Response) => {
 
     try {
         const newOrder = await orders.create(order);
-        res.json(newOrder);
+        res.status(201).send('Successfully created');
     } catch (error) {
-        res.status(400).json(error);
+        res.status(401).send('Unauthorized user');
     }
 }
 

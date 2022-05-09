@@ -1,9 +1,10 @@
-// import the client connection from the database file
+  // import the client connection from the database file
 // @ts-ignore
 import client from "../database";
 
 // create and export a type for the Products
 export type Product = {
+    id?: number,
     name: string,
     price: number,
     category: string

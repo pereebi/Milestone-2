@@ -50,11 +50,15 @@ var index = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
                 return [4 /*yield*/, products.index()];
             case 1:
                 myProducts = _a.sent();
-                res.json(myProducts);
+                res.status(200).send({
+                    data: myProducts,
+                    message: 'Products fetched'
+                });
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
-                res.status(400).json(error_1);
+                res.status(400).send('Bad request');
+                console.log(error_1);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -62,7 +66,7 @@ var index = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
 }); };
 // method to show a product by id
 var show = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, myProducts, error_2;
+    var id, myProduct, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -70,12 +74,16 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 id = req.params.id;
                 return [4 /*yield*/, products.show(id)];
             case 1:
-                myProducts = _a.sent();
-                res.json(myProducts);
+                myProduct = _a.sent();
+                res.status(200).send({
+                    data: myProduct,
+                    message: 'Product was fetched'
+                });
                 return [3 /*break*/, 3];
             case 2:
                 error_2 = _a.sent();
-                res.status(400).json(error_2);
+                res.status(400).send('Bad request');
+                console.log(error_2);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -98,11 +106,15 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, products.create(product)];
             case 2:
                 newProduct = _a.sent();
-                res.json(newProduct);
+                res.status(201).send({
+                    data: newProduct,
+                    message: 'Successfully created'
+                });
                 return [3 /*break*/, 4];
             case 3:
                 error_3 = _a.sent();
-                res.status(400).json(error_3);
+                res.status(401).send('Unauthorized User');
+                console.log(error_3);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -110,7 +122,7 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
 }); };
 // method to show a product by category
 var showProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var category, myProducts, error_4;
+    var category, categoriedProducts, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -119,12 +131,16 @@ var showProduct = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 console.log(category);
                 return [4 /*yield*/, products.showProduct(category)];
             case 1:
-                myProducts = _a.sent();
-                res.json(myProducts);
+                categoriedProducts = _a.sent();
+                res.status(200).send({
+                    data: categoriedProducts,
+                    message: 'Sucessfully fetched the product'
+                });
                 return [3 /*break*/, 3];
             case 2:
                 error_4 = _a.sent();
-                res.status(400).json(error_4);
+                res.status(400).send('Bad request');
+                console.log(error_4);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -142,12 +158,12 @@ var update = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, products.update(id, name_1, price, category)];
             case 1:
                 myProducts = _b.sent();
-                res.json(myProducts);
-                console.log(myProducts);
+                res.status(200).send('Succesfully updated');
                 return [3 /*break*/, 3];
             case 2:
                 error_5 = _b.sent();
-                res.status(400).json(error_5);
+                res.status(401).send('Unauthorized user');
+                console.log(error_5);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -164,11 +180,12 @@ var deleteProduct = function (req, res) { return __awaiter(void 0, void 0, void 
                 return [4 /*yield*/, products["delete"](id)];
             case 1:
                 myProducts = _a.sent();
-                res.json(myProducts);
+                res.status(200).send('Success');
                 return [3 /*break*/, 3];
             case 2:
                 error_6 = _a.sent();
-                res.status(400).json(error_6);
+                res.status(401).send('Unauthorized user');
+                console.log(error_6);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

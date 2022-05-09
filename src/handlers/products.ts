@@ -11,9 +11,13 @@ const products = new AllProducts();
 const index = async (req: Request, res: Response) => {
     try {
         const myProducts = await products.index();
-        res.json(myProducts);
+        res.status(200).send({ 
+            data: myProducts, 
+            message: 'Products fetched' 
+        });
     } catch (error) {
-        res.status(400).json(error);
+        res.status(400).send('Bad request');
+        console.log(error);
     }
     
 }
@@ -22,11 +26,14 @@ const index = async (req: Request, res: Response) => {
 const show = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
-        const myProducts = await products.show(id);
-        res.json(myProducts);
+        const myProduct = await products.show(id);
+        res.status(200).send({ 
+            data: myProduct, 
+            message: 'Product was fetched' 
+        });
     } catch (error) {
-        res.status(400).json(error);
-
+        res.status(400).send('Bad request');
+        console.log(error);
     }
 }
 
@@ -40,9 +47,13 @@ const create = async (req: Request, res: Response) => {
 
     try {
         const newProduct = await products.create(product);
-        res.json(newProduct);
+        res.status(201).send({ 
+            data: newProduct, 
+            message: 'Successfully created' 
+        });
     } catch (error) {
-        res.status(400).json(error);
+        res.status(401).send('Unauthorized User');
+        console.log(error);
     }
 }
 
@@ -51,11 +62,14 @@ const showProduct = async (req: Request, res: Response) => {
     try {
         const category = req.query.category as string;
         console.log(category);
-        const myProducts = await products.showProduct(category);
-        res.json(myProducts);
+        const categoriedProducts = await products.showProduct(category);
+        res.status(200).send({ 
+            data: categoriedProducts, 
+            message: 'Sucessfully fetched the product' 
+        });
     } catch (error) {
-        res.status(400).json(error);
-
+        res.status(400).send('Bad request');
+        console.log(error);
     }
   
 }
@@ -66,11 +80,10 @@ const update = async (req: Request, res: Response) => {
         const id = req.params.id as string;
         const { name, price, category } = req.body;
         const myProducts = await products.update(id, name, price, category);
-        res.json(myProducts);
-        console.log(myProducts);
+        res.status(200).send('Succesfully updated');
     } catch (error) {
-        res.status(400).json(error);
-
+        res.status(401).send('Unauthorized user');
+        console.log(error);
     }
     
 }
@@ -80,10 +93,10 @@ const deleteProduct = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
         const myProducts = await products.delete(id);
-        res.json(myProducts);
+        res.status(200).send('Success');
     } catch (error) {
-        res.status(400).json(error);
-
+        res.status(401).send('Unauthorized user');
+        console.log(error);
     }
    
 }
