@@ -9,7 +9,7 @@ const product: Product = {
 };
 
 describe('Products Model', () => {
-    it('should display all products', () => {
+    it('should have an index method', () => {
         expect(store.index).toBeDefined();
     });
 
@@ -32,7 +32,7 @@ describe('Products Model', () => {
     });
     
     it('index should return a product by id', async() => {
-        // @ts-ignore
+        //@ts-ignore 
         const result = await store.show(product.id);
         expect(result).toBe(result);
     })

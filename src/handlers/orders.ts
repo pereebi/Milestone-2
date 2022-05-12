@@ -10,10 +10,7 @@ const orders = new AllOrders;
 const index = async (req: Request, res: Response) => {
     try {
         const currentOrders = await orders.index();
-        res.status(200).send({ 
-            data: currentOrders,
-            message: 'Successfully fetched Orders' 
-        });
+        res.status(200).json(currentOrders);
     } catch (error) {
         res.status(401).send('Unauthorized user');
     }

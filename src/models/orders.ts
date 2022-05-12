@@ -4,6 +4,7 @@ import client from "../database";
 
 // create and export a type for the Orders
 export type Order = {
+    id?: number,
     products_id: number,
     product_quantity: number,
     users_id: number,

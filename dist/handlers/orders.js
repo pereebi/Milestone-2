@@ -49,10 +49,7 @@ var index = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
                 return [4 /*yield*/, orders.index()];
             case 1:
                 currentOrders = _a.sent();
-                res.status(200).send({
-                    data: currentOrders,
-                    message: 'Successfully fetched Orders'
-                });
+                res.status(200).json(currentOrders);
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
