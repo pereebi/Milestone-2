@@ -196,7 +196,7 @@ var products_routes = function (app) {
     app.get('/products', index);
     app.post('/products', users_1.verifyAuthToken, create);
     app.get('/products/:id', show);
-    app.get('/product/?category', showProduct);
+    app.get('/products/?category', showProduct);
     app.put('/products/:id', users_1.verifyAuthToken, update);
     app["delete"]('/products/:id', users_1.verifyAuthToken, deleteProduct);
 };

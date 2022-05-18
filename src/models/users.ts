@@ -5,6 +5,7 @@ import client from "../database";
 
 // create and export a type for the User
 export type User = {
+    id?: number,
     firstname: string,
     lastname: string,
     password: string

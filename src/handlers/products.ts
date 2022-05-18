@@ -106,7 +106,7 @@ const products_routes = (app: express.Application) => {
     app.get('/products', index);
     app.post('/products', verifyAuthToken, create);
     app.get('/products/:id', show);
-    app.get('/product/?category', showProduct);
+    app.get('/products/?category', showProduct);
     app.put('/products/:id', verifyAuthToken, update);
     app.delete('/products/:id', verifyAuthToken, deleteProduct);
 }
